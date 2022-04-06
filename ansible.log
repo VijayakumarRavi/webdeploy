@@ -1206,3 +1206,6 @@ value only.
 2022-04-02 10:24:11,375 p=8025 u=vijay n=ansible | changed: [45.33.5.196]
 2022-04-02 10:24:11,384 p=8025 u=vijay n=ansible | PLAY RECAP ********************************************************************************************************************************************************************************
 2022-04-02 10:24:11,385 p=8025 u=vijay n=ansible | 45.33.5.196                : ok=14   changed=5    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2022-04-06 17:40:04,574 p=4381 u=vijay n=ansible | ERROR! The vault password file /home/vijay/Desktop/webdepoly/password_file was not found
+2022-04-06 17:40:12,799 p=4386 u=vijay n=ansible | Encryption successful
+2022-04-06 17:40:14,575 p=4391 u=vijay n=ansible | ERROR! input is already encrypted
