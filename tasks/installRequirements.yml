@@ -1,0 +1,56 @@
+- name: install required packages
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - git
+      - git-lfs
+      - tar
+      - gnupg-agent
+      - software-properties-common
+      - default-jdk
+      - neovim
+      - npm
+      - inotify-tools
+    state: present
+
+- name: fetch docker apt key
+  shell: curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+
+- name: Add docker repository
+  shell: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+
+- name: Refresh cache
+  apt:
+    update_cache: yes
+
+- name: Update distro
+  apt:
+    name: "*"
+    state: latest
+
+- name: Update all packages to the latest version
+  apt:
+    upgrade: dist
+
+- name: install docker packages
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    state: present
+
+- name: install docker compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.27.3/docker-compose-Linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: 755
+
+- name: Remove dependencies that are no longer required
+  apt:
+    autoremove: yes
+

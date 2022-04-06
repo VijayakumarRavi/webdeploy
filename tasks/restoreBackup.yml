@@ -1,0 +1,31 @@
+- name: Download backup
+  get_url:
+    url: https://gitlab.com/vijaysrv/webbackup/-/raw/main/backup.tar.gz.gpg
+    dest: /tmp/backup.tar.gz.gpg
+    mode: 755
+
+- name: Decrypt backup
+  command: "gpg --pinentry-mode=loopback --yes --passphrase 'Vijay@29oct' -d -o /tmp/backup.tar.gz /tmp/backup.tar.gz.gpg"
+
+- name: Unarchives backup
+  ansible.builtin.unarchive:
+    src: /tmp/backup.tar.gz
+    dest: /
+    remote_src: yes
+
+- name: Cloneing from cloud
+  ansible.builtin.git:
+    repo: https://gitlab.com/vijaysrv/webbackup.git
+    dest: /webbackup
+    version: main
+
+      #- name: Execute the script
+      #  shell: bash /docker/scripts/setup.sh
+
+- name: Cleanup task
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /tmp/backup.tar.gz
+    - /tmp/backup.tar.gz.gpg

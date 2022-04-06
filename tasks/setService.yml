@@ -1,0 +1,139 @@
+
+- name: Service file creation for docker-compose.service
+  tags: systemd
+  copy:
+    dest: /etc/systemd/system/docker-compose.service
+    content: |
+      [Unit]
+      Description=Depoly Docker Compose Service
+      Requires=docker.service
+      After=docker.service
+      [Service]
+      Type=oneshot
+      RemainAfterExit=true
+      WorkingDirectory=/docker/compose
+      ExecStart=/usr/local/bin/docker-compose up -d --remove-orphans
+      ExecStop=/usr/local/bin/docker-compose down
+      [Install]
+      WantedBy=multi-user.target
+
+- name: Service file creation for autoGitBackup.service
+  tags: systemd
+  copy:
+    dest: /etc/systemd/system/autoGitBackup.service
+    content: |
+      [Unit]
+      Description=Automatic backup to git Service
+      After=network.target
+      [Service]
+      User=root
+      Restart=always
+      RestartSec=1
+      WorkingDirectory=/webbackup
+      ExecStart=/bin/bash /docker/scripts/listen.sh
+      [Install]
+      WantedBy=multi-user.target
+
+- name: Service file creation for autoTar.gz.service
+  tags: systemd
+  copy:
+    dest: /etc/systemd/system/autoTar.service
+    content: |
+      [Unit]
+      Description=Creating tar backup
+      [Service]
+      Type=oneshot
+      WorkingDirectory=/webbackup
+      ExecStart=/bin/bash /docker/scripts/run.sh
+      [Install]
+      WantedBy=multi-user.target
+
+- name: Service timer creation for autoTar.gz.service
+  tags: systemd
+  copy:
+    dest: /etc/systemd/system/autoTar.timer
+    content: |
+      [Unit]
+      Description=runs autoTar.service
+      [Timer]
+      OnCalendar=*:0/10
+      Persistent=true
+      Unit=autoTar.service
+      [Install]
+      WantedBy=timers.target
+
+- name: Service file creation for autoGitCleanup.service
+  tags: systemd
+  copy:
+    dest: /etc/systemd/system/autoGitCleanup.service
+    content: |
+      [Unit]
+      Description=Cleaning .git folder in /webbackup
+      [Service]
+      Type=oneshot
+      WorkingDirectory=/tmp
+      ExecStart=/bin/bash /docker/scripts/cleanup.sh
+      [Install]
+      WantedBy=multi-user.target
+
+- name: Service timer creation for autoGitCleanup.service
+  tags: systemd
+  copy:
+    dest: /etc/systemd/system/autoGitCleanup.timer
+    content: |
+      [Unit]
+      Description=runs autoGitCleanup.service
+      [Timer]
+      OnCalendar=daily
+      Persistent=true
+      Unit=autoGitCleanup.service
+      [Install]
+      WantedBy=timers.target
+
+- name: Systemd service daemon_reload
+  tags: systemd
+  systemd:
+    daemon_reload: yes
+
+- name: Systemd service activation for autoGitBackup.service
+  tags: systemd
+  systemd:
+      enabled: yes
+      state: started
+      name: autoGitBackup.service
+
+- name: Systemd service activation fot docker-compose.service
+  tags: systemd
+  systemd:
+      enabled: yes
+      state: started
+      name: docker-compose.service
+
+- name: Systemd service activation for autoTar.service
+  tags: systemd
+  systemd:
+      enabled: yes
+      state: started
+      name: autoTar.service
+
+- name: Systemd service activation for autoTar.timer
+  tags: systemd
+  systemd:
+      enabled: yes
+      state: started
+      name: autoTar.timer
+
+- name: Systemd service activation for autoGitCleanup.service
+  tags: systemd
+  systemd:
+      enabled: yes
+        #      state: started
+      name: autoGitCleanup.service
+
+- name: Systemd service activation for autoGitCleanup.timer
+  tags: systemd
+  systemd:
+      enabled: yes
+      state: started
+      name: autoGitCleanup.timer
+

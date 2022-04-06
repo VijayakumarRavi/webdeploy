@@ -1,0 +1,5 @@
+[server]
+45.33.5.196   ansible_user=root
+[local]
+10.0.2.6   ansible_user=root
+
