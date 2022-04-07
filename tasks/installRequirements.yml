@@ -15,11 +15,21 @@
       - npm
     state: present
 
-- name: fetch docker apt key
+- name: fetch docker apt key debian
   shell: curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+  when: "ansible_distribution|string == 'Debian'"
 
-- name: Add docker repository
+- name: Add docker repository debian
+  shell: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+  when: "ansible_distribution|string == 'Debian'"
+
+- name: fetch docker apt key ubuntu
+  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  when: "ansible_distribution|string == 'Ubuntu'"
+
+- name: Add docker repository ubuntu
   shell: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  when: "ansible_distribution|string == 'Ubuntu'"
 
 - name: Refresh cache
   apt:
@@ -48,8 +58,16 @@
     dest: /usr/local/bin/docker-compose
     mode: 755
 
-- name: fetch docker apt key
+- name: Check if rclone is installed
+  package:
+    name: rclone
+    state: present
+  check_mode: true
+  register: rclone_check
+
+- name: Installing rclone
   shell: curl https://rclone.org/install.sh | sudo bash
+  when: rclone_check.changed
 
 - name: Remove dependencies that are no longer required
   apt:

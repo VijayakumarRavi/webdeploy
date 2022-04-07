@@ -2,7 +2,9 @@
 - hosts: aws
   gather_facts: yes
   become: true
+  vars_files:
+    - vars.yml
   tasks:
-    #    - include_tasks: tasks/installRequirements.yml
+    - include_tasks: tasks/installRequirements.yml
     - include_tasks: tasks/restoreBackup.yml
-    #    - include_tasks: tasks/setService.yml
+    - include_tasks: tasks/setService.yml

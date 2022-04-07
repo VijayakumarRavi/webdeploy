@@ -1,11 +1,11 @@
 - name: Download backup
   get_url:
-    url: "https://www.dropbox.com/s/513h35qbhvm3k4w/backup.tar.gz.gpg?dl=1"
+    url: '{{ drop_link }}'
     dest: /tmp/backup.tar.gz.gpg
     mode: 755
 
 - name: Decrypt backup
-  command: "gpg --pinentry-mode=loopback --yes --passphrase 'Vijay@29oct' -d -o /tmp/backup.tar.gz /tmp/backup.tar.gz.gpg"
+  command: "gpg --pinentry-mode=loopback --yes --passphrase '{{ gpg_pass }}' -d -o /tmp/backup.tar.gz /tmp/backup.tar.gz.gpg"
 
 - name: Unarchives backup
   ansible.builtin.unarchive:
