@@ -1,5 +1,5 @@
-[server]
-45.33.5.196   ansible_user=root
+[aws]
+linuxnerd.xyz   ansible_connection=ssh ansible_user=root ansible_ssh_private_key_file=~/.ssh/Aws-key.pem
 [local]
-10.0.2.6   ansible_user=root
+10.0.2.6   ansible_connection=ssh ansible_user=root
 

@@ -118,9 +118,9 @@ savelog -n -c 7 $LOGFILE >> $CRONLOG
 echo $(date -u)' | starting backup . . .' >> $CRONLOG
 
 #Now do the sync!
-
-tar -zcf /tmp/backup.tar.gz /docker && gpg --yes --pinentry-mode=loopback --passphrase "Vijay@29oct" -c  -o /webbackup/backup.tar.gz.gpg /tmp/backup.tar.gz
-rclone sync /webbackup/backup.tar.gz.gpg $DEST --config=$CONFIG --transfers $TRANSFERS --bwlimit "$BWLIMIT" --min-age $MINAGE --delete-excluded $LOGS --checksum -L
+echo $(date -u)' | crating Tar.gz . . .'
+tar -zcf /tmp/backup.tar.gz /docker /dev/null 2>&1 && gpg --yes --pinentry-mode=loopback --passphrase "Vijay@29oct" -c  -o /backup.tar.gz.gpg /tmp/backup.tar.gz
+rclone sync /backup.tar.gz.gpg $DEST --config=$CONFIG --transfers $TRANSFERS --bwlimit "$BWLIMIT" --min-age $MINAGE --delete-excluded $LOGS --checksum -L
 #rclone sync $SRC $DESTENCRYPT --config=$CONFIG --transfers $TRANSFERS --bwlimit "$BWLIMIT" --min-age $MINAGE --delete-excluded $LOGS --checksum -L --create-empty-src-dirs -P
 
 #log success

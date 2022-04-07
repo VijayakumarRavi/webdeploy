@@ -1,6 +1,6 @@
 - name: Download backup
   get_url:
-    url: https://gitlab.com/vijaysrv/webbackup/-/raw/main/backup.tar.gz.gpg
+    url: "https://www.dropbox.com/s/513h35qbhvm3k4w/backup.tar.gz.gpg?dl=1"
     dest: /tmp/backup.tar.gz.gpg
     mode: 755
 
@@ -12,15 +12,6 @@
     src: /tmp/backup.tar.gz
     dest: /
     remote_src: yes
-
-- name: Cloneing from cloud
-  ansible.builtin.git:
-    repo: https://gitlab.com/vijaysrv/webbackup.git
-    dest: /webbackup
-    version: main
-
-      #- name: Execute the script
-      #  shell: bash /docker/scripts/setup.sh
 
 - name: Cleanup task
   file:

@@ -17,76 +17,31 @@
       [Install]
       WantedBy=multi-user.target
 
-- name: Service file creation for autoGitBackup.service
+- name: Service file creation for autoBackup.service
   tags: systemd
   copy:
-    dest: /etc/systemd/system/autoGitBackup.service
-    content: |
-      [Unit]
-      Description=Automatic backup to git Service
-      After=network.target
-      [Service]
-      User=root
-      Restart=always
-      RestartSec=1
-      WorkingDirectory=/webbackup
-      ExecStart=/bin/bash /docker/scripts/listen.sh
-      [Install]
-      WantedBy=multi-user.target
-
-- name: Service file creation for autoTar.gz.service
-  tags: systemd
-  copy:
-    dest: /etc/systemd/system/autoTar.service
+    dest: /etc/systemd/system/autoBackup.service
     content: |
       [Unit]
       Description=Creating tar backup
       [Service]
       Type=oneshot
-      WorkingDirectory=/webbackup
-      ExecStart=/bin/bash /docker/scripts/run.sh
+      #WorkingDirectory=/webbackup
+      ExecStart=/bin/bash /docker/scripts/backup.sh
       [Install]
       WantedBy=multi-user.target
 
-- name: Service timer creation for autoTar.gz.service
+- name: Service timer creation for autoBackup.service
   tags: systemd
   copy:
-    dest: /etc/systemd/system/autoTar.timer
+    dest: /etc/systemd/system/autoBackup.timer
     content: |
       [Unit]
-      Description=runs autoTar.service
+      Description=runs autoBackup.service
       [Timer]
-      OnCalendar=*:0/10
+      OnCalendar=*:0/30
       Persistent=true
-      Unit=autoTar.service
-      [Install]
-      WantedBy=timers.target
-
-- name: Service file creation for autoGitCleanup.service
-  tags: systemd
-  copy:
-    dest: /etc/systemd/system/autoGitCleanup.service
-    content: |
-      [Unit]
-      Description=Cleaning .git folder in /webbackup
-      [Service]
-      Type=oneshot
-      WorkingDirectory=/tmp
-      ExecStart=/bin/bash /docker/scripts/cleanup.sh
-      [Install]
-      WantedBy=multi-user.target
-
-- name: Service timer creation for autoGitCleanup.service
-  tags: systemd
-  copy:
-    dest: /etc/systemd/system/autoGitCleanup.timer
-    content: |
-      [Unit]
-      Description=runs autoGitCleanup.service
-      [Timer]
-      OnCalendar=daily
-      Persistent=true
-      Unit=autoGitCleanup.service
+      Unit=autoBackup.service
       [Install]
       WantedBy=timers.target
 
@@ -95,13 +50,6 @@
   systemd:
     daemon_reload: yes
 
-- name: Systemd service activation for autoGitBackup.service
-  tags: systemd
-  systemd:
-      enabled: yes
-      state: started
-      name: autoGitBackup.service
-
 - name: Systemd service activation fot docker-compose.service
   tags: systemd
   systemd:
@@ -109,31 +57,17 @@
       state: started
       name: docker-compose.service
 
-- name: Systemd service activation for autoTar.service
+- name: Systemd service activation for autoBackup.service
+  tags: systemd
+  systemd:
+      enabled: yes
+        #state: started
+      name: autoBackup.service
+
+- name: Systemd service activation for autoBackup.timer
   tags: systemd
   systemd:
       enabled: yes
       state: started
-      name: autoTar.service
-
-- name: Systemd service activation for autoTar.timer
-  tags: systemd
-  systemd:
-      enabled: yes
-      state: started
-      name: autoTar.timer
-
-- name: Systemd service activation for autoGitCleanup.service
-  tags: systemd
-  systemd:
-      enabled: yes
-        #      state: started
-      name: autoGitCleanup.service
-
-- name: Systemd service activation for autoGitCleanup.timer
-  tags: systemd
-  systemd:
-      enabled: yes
-      state: started
-      name: autoGitCleanup.timer
+      name: autoBackup.timer
 

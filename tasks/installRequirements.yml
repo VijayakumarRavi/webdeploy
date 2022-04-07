@@ -7,21 +7,19 @@
       - ca-certificates
       - curl
       - git
-      - git-lfs
       - tar
+      - unzip
       - gnupg-agent
       - software-properties-common
-      - default-jdk
       - neovim
       - npm
-      - inotify-tools
     state: present
 
 - name: fetch docker apt key
   shell: curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
 
 - name: Add docker repository
-  shell: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+  shell: add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
 - name: Refresh cache
   apt:
@@ -49,6 +47,9 @@
     url: https://github.com/docker/compose/releases/download/1.27.3/docker-compose-Linux-x86_64
     dest: /usr/local/bin/docker-compose
     mode: 755
+
+- name: fetch docker apt key
+  shell: curl https://rclone.org/install.sh | sudo bash
 
 - name: Remove dependencies that are no longer required
   apt:
