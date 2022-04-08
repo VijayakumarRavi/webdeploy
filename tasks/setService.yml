@@ -45,12 +45,18 @@
       [Install]
       WantedBy=timers.target
 
+- name: Create a /var/log/rclone-backup if it does not exist
+  ansible.builtin.file:
+    path: /var/log/rclone-backup
+    state: directory
+    mode: '0755'
+
 - name: Systemd service daemon_reload
   tags: systemd
   systemd:
     daemon_reload: yes
 
-- name: Systemd service activation fot docker-compose.service
+- name: Systemd service activation for docker-compose.service
   tags: systemd
   systemd:
       enabled: yes

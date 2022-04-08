@@ -67,7 +67,7 @@
 
 - name: Installing rclone
   shell: curl https://rclone.org/install.sh | sudo bash
-  when: rclone_check.changed
+  when: not rclone_check.changed
 
 - name: Remove dependencies that are no longer required
   apt:
