@@ -3,11 +3,11 @@ name: ansible-lint
 on:
   push:
     branches:
-      - development
+      - main
   pull_request:
     branches:
-      - development
-      - master
+      - main
+      - main
 
 jobs:
   build:
@@ -27,4 +27,4 @@ jobs:
           pip install ansible ansible-lint
       - name: Analysing playbook
         run: |
-          ansible-lint install/*.yml -x 301,206,504 -v
+          ansible-playbook start.yml
