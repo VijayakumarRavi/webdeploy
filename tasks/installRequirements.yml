@@ -1,6 +1,7 @@
+---
 - name: install required packages
   apt:
-    update_cache: yes
+    update_cache: true
     cache_valid_time: 3600
     name:
       - apt-transport-https
