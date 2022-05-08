@@ -17,5 +17,5 @@ before_script:
 run:
   stage: run
   script:
-    - ansible-playbook main.yml #--vault-password-file=vault_pass
+    - ansible-playbook start.yml #--vault-password-file=vault_pass
 
