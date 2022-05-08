@@ -2,7 +2,8 @@ stages:
   - run
 
 image:
-  name: registry.gitlab.com/torese/docker-ansible
+  #  name: registry.gitlab.com/torese/docker-ansible
+  name: plmlab.math.cnrs.fr/docker-images/systemd/systemd_ubuntu-20.04
 
 variables:
     ANSIBLE_HOST_KEY_CHECKING: 'false'
@@ -10,8 +11,7 @@ variables:
     ANSIBLE_PYTHON_INTERPRRTER: /usr/bin/python3
 
 before_script:
-  - yum install httpd -y
-  - yum install -y python3
+  - apt install -y python3 ansible
   - ansible --version
 
 run:
