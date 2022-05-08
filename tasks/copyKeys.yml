@@ -1,0 +1,36 @@
+---
+- name: set permissions for .ssh directory
+  file:
+    path: /root/.ssh
+    mode: 0700
+    state: directory
+
+- name: copying private keys
+  become: true
+  copy:
+    src: "/home/vijay/Desktop/andep/deploy/files/scripts/keys/{{ item.src }}"
+    dest: "/root/.ssh/{{ item.src }}"
+    owner: root
+    group: root
+    mode: 600
+  with_items:
+    - { src: 'id_rsa' }
+    - { src: 'Aws-key.pem' }
+    - { src: 'Git' }
+    - { src: 'Server' }
+
+
+- name: copying public keys
+  become: true
+  copy:
+    src: "/home/vijay/Desktop/andep/deploy/files/scripts/keys/{{ item.srcpub }}"
+    dest: "/root/.ssh/{{ item.srcpub }}"
+    owner: root
+    group: root
+    mode: 644
+  with_items:
+    - { srcpub: 'config' }
+    - { srcpub: 'Aws-key.pub' }
+    - { srcpub: 'Git.pub' }
+    - { srcpub: 'Server.pub' }
+
