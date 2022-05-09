@@ -2,10 +2,7 @@ stages:
   - run
 
 image:
-  #  name: registry.gitlab.com/torese/docker-ansible
-      -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
-    --cap-add SYS_ADMIN                 \
-  name: alehaa/debian-systemd:stretch
+  name: registry.gitlab.com/torese/docker-ansible
 
 variables:
     ANSIBLE_HOST_KEY_CHECKING: 'false'
