@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: aws
   gather_facts: true
   become: true
   vars_files:

@@ -3,7 +3,9 @@ stages:
 
 image:
   #  name: registry.gitlab.com/torese/docker-ansible
-  name: plmlab.math.cnrs.fr/docker-images/systemd/systemd_ubuntu-20.04
+      -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
+    --cap-add SYS_ADMIN                 \
+  name: alehaa/debian-systemd:stretch
 
 variables:
     ANSIBLE_HOST_KEY_CHECKING: 'false'
